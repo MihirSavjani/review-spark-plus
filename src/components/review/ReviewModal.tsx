@@ -144,7 +144,7 @@ export const ReviewModal = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] p-0">
+      <DialogContent className="max-w-4xl h-[90vh] flex flex-col p-0 gap-0">
         <DialogHeader className="px-6 py-4 border-b">
           <div className="flex items-start justify-between">
             <div className="space-y-2">
@@ -185,11 +185,13 @@ export const ReviewModal = ({
           </div>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 px-6 py-4">
-          <CriteriaReviewForm
-            criteria={criteria}
-            onCriteriaChange={setCriteria}
-          />
+        <ScrollArea className="flex-1 overflow-y-auto">
+          <div className="px-6 py-4">
+            <CriteriaReviewForm
+              criteria={criteria}
+              onCriteriaChange={setCriteria}
+            />
+          </div>
         </ScrollArea>
 
         <Separator />
