@@ -146,8 +146,8 @@ export const ReviewModal = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl h-[90vh] flex flex-col p-0 gap-0">
         <DialogHeader className="px-6 py-4 border-b">
-          <div className="flex items-start justify-between">
-            <div className="space-y-2">
+          <div className="flex items-start justify-between pr-8">
+            <div className="space-y-2 flex-1">
               <DialogTitle className="text-2xl font-bold">
                 Candidate Review
               </DialogTitle>
@@ -167,18 +167,18 @@ export const ReviewModal = ({
                 )}
               </div>
             </div>
-            <div className="text-right space-y-1">
-              <div className="flex items-center gap-2">
+            <div className="text-right space-y-1 min-w-fit">
+              <div className="flex items-center gap-2 justify-end">
                 {isReviewComplete() ? (
                   <CheckCircle className="h-5 w-5 text-review-success" />
                 ) : (
                   <Clock className="h-5 w-5 text-review-warning" />
                 )}
-                <span className="text-sm font-medium">
+                <span className="text-sm font-medium whitespace-nowrap">
                   {Math.round(getCompletionPercentage())}% Complete
                 </span>
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-xs text-muted-foreground whitespace-nowrap">
                 {criteria.filter(c => c.rating > 0).length} of {criteria.length} criteria rated
               </div>
             </div>
