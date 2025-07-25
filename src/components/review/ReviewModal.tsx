@@ -215,13 +215,6 @@ export const ReviewModal = ({
                 Cancel
               </Button>
               <Button 
-                variant="secondary" 
-                onClick={() => handleSave(true)}
-                disabled={isSaving}
-              >
-                Save Draft
-              </Button>
-              <Button 
                 onClick={() => handleSave(false)}
                 disabled={isSaving}
                 className="bg-review-accent hover:bg-review-accent/90"
