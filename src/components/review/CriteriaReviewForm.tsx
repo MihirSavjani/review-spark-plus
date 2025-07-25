@@ -2,8 +2,13 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { StarRating } from "./StarRating";
 import { Badge } from "@/components/ui/badge";
+import { AddCustomCriteria } from "./AddCustomCriteria";
+import { EditCriteriaDialog } from "./EditCriteriaDialog";
+import { Edit, Trash2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export interface ReviewCriteria {
   id: string;
@@ -11,6 +16,7 @@ export interface ReviewCriteria {
   description: string;
   rating: number;
   comment: string;
+  isCustom?: boolean;
 }
 
 interface CriteriaReviewFormProps {
@@ -19,11 +25,58 @@ interface CriteriaReviewFormProps {
 }
 
 export const CriteriaReviewForm = ({ criteria, onCriteriaChange }: CriteriaReviewFormProps) => {
+  const [editingCriteria, setEditingCriteria] = useState<ReviewCriteria | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const { toast } = useToast();
+
   const updateCriteria = (id: string, field: keyof ReviewCriteria, value: any) => {
     const updated = criteria.map(c => 
       c.id === id ? { ...c, [field]: value } : c
     );
     onCriteriaChange(updated);
+  };
+
+  const addCustomCriteria = (newCriteria: ReviewCriteria) => {
+    onCriteriaChange([...criteria, newCriteria]);
+    toast({
+      title: "Custom criteria added",
+      description: "You can now rate this new criteria",
+    });
+  };
+
+  const editCriteria = (updatedCriteria: ReviewCriteria) => {
+    const updated = criteria.map(c => 
+      c.id === updatedCriteria.id ? updatedCriteria : c
+    );
+    onCriteriaChange(updated);
+    toast({
+      title: "Criteria updated",
+      description: "Changes have been saved successfully",
+    });
+  };
+
+  const deleteCriteria = (criteriaId: string) => {
+    const criteriaToDelete = criteria.find(c => c.id === criteriaId);
+    if (!criteriaToDelete?.isCustom) {
+      toast({
+        title: "Cannot delete default criteria",
+        description: "Only custom criteria can be deleted",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const updated = criteria.filter(c => c.id !== criteriaId);
+    onCriteriaChange(updated);
+    toast({
+      title: "Criteria deleted",
+      description: "Custom criteria has been removed",
+    });
+  };
+
+  const handleEditClick = (criteria: ReviewCriteria) => {
+    setEditingCriteria(criteria);
+    setIsEditDialogOpen(true);
   };
 
   const getOverallRating = () => {
@@ -71,7 +124,7 @@ export const CriteriaReviewForm = ({ criteria, onCriteriaChange }: CriteriaRevie
       {/* Criteria List */}
       <div className="space-y-4">
         {criteria.map((criterion, index) => (
-          <Card key={criterion.id} className="p-5 transition-all duration-200 hover:shadow-md border-l-4 border-l-review-accent/30">
+          <Card key={criterion.id} className={`p-5 transition-all duration-200 hover:shadow-md border-l-4 ${criterion.isCustom ? 'border-l-review-success/50' : 'border-l-review-accent/30'}`}>
             <div className="space-y-4">
               {/* Header */}
               <div className="flex items-start justify-between">
@@ -81,10 +134,37 @@ export const CriteriaReviewForm = ({ criteria, onCriteriaChange }: CriteriaRevie
                       {String(index + 1).padStart(2, '0')}
                     </Badge>
                     <h4 className="font-semibold text-lg">{criterion.name}</h4>
+                    {criterion.isCustom && (
+                      <Badge variant="secondary" className="text-xs bg-review-success/10 text-review-success">
+                        Custom
+                      </Badge>
+                    )}
                   </div>
                   <p className="text-sm text-review-muted leading-relaxed">
                     {criterion.description}
                   </p>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex items-center gap-1 ml-4">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleEditClick(criterion)}
+                    className="h-8 w-8 p-0 hover:bg-review-primary/20"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  {criterion.isCustom && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => deleteCriteria(criterion.id)}
+                      className="h-8 w-8 p-0 hover:bg-destructive/20 hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               </div>
 
@@ -115,7 +195,24 @@ export const CriteriaReviewForm = ({ criteria, onCriteriaChange }: CriteriaRevie
             </div>
           </Card>
         ))}
+        
+        {/* Add Custom Criteria */}
+        <AddCustomCriteria 
+          onAddCriteria={addCustomCriteria}
+          criteriaCount={criteria.length}
+        />
       </div>
+
+      {/* Edit Criteria Dialog */}
+      <EditCriteriaDialog
+        isOpen={isEditDialogOpen}
+        onClose={() => {
+          setIsEditDialogOpen(false);
+          setEditingCriteria(null);
+        }}
+        criteria={editingCriteria}
+        onSave={editCriteria}
+      />
     </div>
   );
 };
