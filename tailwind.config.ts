@@ -52,6 +52,21 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				review: {
+					primary: 'hsl(var(--review-primary))',
+					'primary-foreground': 'hsl(var(--review-primary-foreground))',
+					accent: 'hsl(var(--review-accent))',
+					success: 'hsl(var(--review-success))',
+					warning: 'hsl(var(--review-warning))',
+					muted: 'hsl(var(--review-muted))'
+				},
+				rating: {
+					excellent: 'hsl(var(--rating-excellent))',
+					good: 'hsl(var(--rating-good))',
+					average: 'hsl(var(--rating-average))',
+					poor: 'hsl(var(--rating-poor))',
+					inactive: 'hsl(var(--rating-inactive))'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

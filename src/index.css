@@ -38,6 +38,21 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* Professional review system colors */
+    --review-primary: 236 72% 79%;
+    --review-primary-foreground: 224 71% 4%;
+    --review-accent: 221 83% 53%;
+    --review-success: 142 76% 36%;
+    --review-warning: 32 95% 44%;
+    --review-muted: 215 20% 65%;
+    
+    /* Rating colors */
+    --rating-excellent: 142 76% 36%;
+    --rating-good: 84 81% 44%;
+    --rating-average: 32 95% 44%;
+    --rating-poor: 0 84% 60%;
+    --rating-inactive: 214 32% 91%;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
